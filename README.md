@@ -8,3 +8,22 @@ faster than `lxml` or `xml`.
 
 You can download it by running `pip install git+https://github.com/Sys67654tdcm/XML2---A-lightweight-Python-module-for-parsing-XML.git#egg=xml2` in your terminal.
 
+If you would like to parse XML, you need to run something like this:
+```python
+from xml2 import XML
+print(XML("<hello><world>!</world></hello>").parse())
+```
+All the logic is stored in the `XML` class.
+For XML like `<hello><world>!</world></hello>`, `XML.parse` should return
+```python
+[{
+  "tag": "hello",
+  "values": [
+    {"tag": "world",
+      "values": ["!"]
+    }
+  ],
+  "attributes": {}
+}]
+```
+Please note that you can call `XML.clean()` on the return value from `XML.parse`.
