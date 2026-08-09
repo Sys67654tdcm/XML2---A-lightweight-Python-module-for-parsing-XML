@@ -20,7 +20,8 @@ For XML like `<hello><world>!</world></hello>`, `XML.parse` should return
   "tag": "hello",
   "values": [
     {"tag": "world",
-      "values": ["!"]
+      "values": ["!"],
+      "attributes": {}
     }
   ],
   "attributes": {}
