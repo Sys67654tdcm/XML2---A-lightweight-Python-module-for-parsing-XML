@@ -27,4 +27,4 @@ For XML like `<hello><world>!</world></hello>`, `XML.parse` should return
   "attributes": {}
 }]
 ```
-Please note that you can call `XML.clean()` on the return value from `XML.parse`.
+Please note that you can call `.clean()` on the return value from `XML.parse`.
