@@ -1,8 +1,8 @@
 """
 XML2 (official name) / xml2 (module name) - An XML parser I made.
 I was bored. It is LIGHTWEIGHT, and doesn't even use any external modules that aren't in the standard library.
-It is designed to be SUPER FAST, for a Python lexer. It won't beat lxml or the actual xml module, BUT it can
-go really fast. Hence the lexing in the __init__.
+It is designed to be SUPER FAST, for a Python XML parser and lexer. It can beat lxml and xml in small XML files,
+however, this does go very slow on big XML files.
 """
 from copy import deepcopy
 __all__ = {"XML",}
@@ -10,7 +10,7 @@ _deescape = lambda xml: xml.replace("&amp;", "&").replace("&lt;", "<").replace("
 _escape = lambda xml: xml.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;").replace("'", "&apos;")
 
 def _split(text, separator): #i used AI to make this _split(). what are you gonna do? say i mistreated god?
-    parts = []
+	parts = []
     current = []
 
     in_quotes = False
