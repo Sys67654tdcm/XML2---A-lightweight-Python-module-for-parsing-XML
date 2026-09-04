@@ -5,12 +5,13 @@ It is designed to be SUPER FAST, for a Python XML parser and lexer. It can beat 
 however, this does go very slow on big XML files.
 """
 from copy import deepcopy
+
 __all__ = {"XML",}
 _deescape = lambda xml: xml.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", '"').replace("&apos;", "'")
 _escape = lambda xml: xml.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;").replace("'", "&apos;")
 
 def _split(text, separator): #i used AI to make this _split(). what are you gonna do? say i mistreated god?
-	parts = []
+    parts = []
     current = []
 
     in_quotes = False
@@ -40,13 +41,11 @@ def _split(text, separator): #i used AI to make this _split(). what are you gonn
 class XML: #this is just a fancy class for a str lol
     def __init__(self, *args, **kwargs):
         self.super = str(*args, **kwargs)
-        self.value = self.super
         self.lexed = self.lex()
+        
         
     def parse(self):
         root_tag = None
-        if self.super != self.value:
-            self.lexed = self.lex() #updates the lexed
         thing = self.lexed
         
         stack = []
@@ -60,7 +59,10 @@ class XML: #this is just a fancy class for a str lol
                     for i in thing2[1:]:
                         if i:
                             thing3 = _split(i, "=")
-                            node["attributes"][thing3[0]] = _deescape(thing3[1].strip('"').strip("'"))
+                            if "=" not in i:
+                                node["attributes"][thing3[0]] = ""
+                            else:
+                                node["attributes"][thing3[0]] = _deescape(thing3[1].strip('"').strip("'"))
                         
                 if root_tag is None:
                     root_tag = name
@@ -85,18 +87,19 @@ class XML: #this is just a fancy class for a str lol
         xml = self.super.__str__()
         buffer1 = ""
         output = []
-        for index, i in enumerate(xml):
+        for i in xml:
             if i == "<":
                 output.append(("TEXT", _deescape(buffer1)))
                 buffer1 = ""
-            elif i == ">":
+                continue
+            if i == ">":
                 if buffer1.startswith("/"):
                     output.append(("END_TAG", buffer1))
                 else:
                     output.append(("START_TAG", buffer1))
                 buffer1 = ""
-            else:
-                buffer1 += i
+                continue
+            buffer1 += i
                 
         if buffer1:
             output.append(("TEXT", _deescape(buffer1)))
@@ -158,4 +161,5 @@ class _XMLAST(list): #fancy list class lol
 
         
 if __name__ == "__main__":                
-    print(str(XML("<hello></hello>").parse().clean())) 
+    print(str(XML("<hello><world>!</world></hello>").parse().clean())) 
+
