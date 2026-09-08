@@ -1,8 +1,8 @@
 """
 XML2 (official name) / xml2 (module name) - An XML parser I made.
 I was bored. It is LIGHTWEIGHT, and doesn't even use any external modules that aren't in the standard library.
-It is designed to be SUPER FAST, for a Python XML parser and lexer. It can beat lxml and xml in small XML files,
-however, this does go very slow on big XML files.
+It is designed to be SUPER FAST, for a Python lexer. It won't beat lxml or the actual xml module, BUT it can
+go really fast. Hence the lexing in the __init__.
 """
 from copy import deepcopy
 
@@ -96,7 +96,12 @@ class XML: #this is just a fancy class for a str lol
                 if buffer1.startswith("/"):
                     output.append(("END_TAG", buffer1))
                 else:
-                    output.append(("START_TAG", buffer1))
+                    if buffer1.endswith("/"):
+                        thing = len(buffer1) - 1
+                        output.append(("START_TAG", buffer1[:thing]))
+                        output.append(("END_TAG", buffer1[:thing]))
+                    else:
+                        output.append(("START_TAG", buffer1))
                 buffer1 = ""
                 continue
             buffer1 += i
@@ -161,5 +166,5 @@ class _XMLAST(list): #fancy list class lol
 
         
 if __name__ == "__main__":                
-    print(str(XML("<hello><world>!</world></hello>").parse().clean())) 
+    print(str(XML("<hello><world>!</world><test name=\"test\"/></hello>").parse().clean())) 
 
